@@ -51,10 +51,13 @@ class ShapeButtonHandler implements ActionListener {
 
         if (Info.equals("Text")) {
             Target.SetShape(Info);
+            Target.IsDrawing = false;
             Target.requestFocusInWindow();
         }
         else if (Info.equals("Line") || Info.equals("Rectangle") || Info.equals("Circle")) {
             Target.SetShape(Info);
+            Target.Input.delete(0, Target.Input.length());
+            Target.IsWritingFinished = false;
         }
     }
 }

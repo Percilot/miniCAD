@@ -8,7 +8,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     int x2, y2;
     Color NowDrawingColor;
     float NowDrawingWidth;
-    boolean IsDrawingFinished;
+    boolean IsDrawing;
 
     boolean IsWritingFinished;
     String NowDrawingShape;
@@ -22,7 +22,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         Input = new StringBuffer();
         NowDrawingShape = "Line";
         NowDrawingColor = Color.BLACK;
-        IsDrawingFinished = false;
+        IsDrawing = false;
         IsWritingFinished = false;
         NowDrawingWidth = 1;
         x1 = x2 = y1 = y2 = -1;
@@ -65,8 +65,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             }
         } else {
             Info = new Shapes(NowDrawingShape, x1, y1, x2, y2, NowDrawingWidth, NowDrawingColor, null);
-            MyDrawShape(temp, Info, !IsDrawingFinished);
-            if (!IsDrawingFinished)
+            MyDrawShape(temp, Info, !IsDrawing);
+            if (!IsDrawing)
                 Memory.add(Info);
         }
         temp.dispose();
@@ -104,14 +104,14 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     @Override
     public void mouseClicked(MouseEvent e) {
         if (!NowDrawingShape.equals("Text")) {
-            if (!IsDrawingFinished) {
+            if (!IsDrawing) {
                 x1 = e.getX();
                 y1 = e.getY();
-                IsDrawingFinished = true;
+                IsDrawing = true;
             } else {
                 x2 = e.getX();
                 y2 = e.getY();
-                IsDrawingFinished = false;
+                IsDrawing = false;
                 repaint();
             }
         } else if (!IsWritingFinished){
@@ -146,7 +146,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (IsDrawingFinished && !NowDrawingShape.equals("Text")) {
+        if (IsDrawing && !NowDrawingShape.equals("Text")) {
             x2 = e.getX();
             y2 = e.getY();
             repaint();
