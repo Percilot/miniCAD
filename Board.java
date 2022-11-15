@@ -1,41 +1,48 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-public class Board extends JPanel implements MouseListener, MouseMotionListener {
+public class Board extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
     int x1, y1;
     int x2, y2;
     Color NowDrawingColor;
     float NowDrawingWidth;
+    boolean IsDrawingFinished;
 
-    boolean IsDrawing;
-
+    boolean IsWritingFinished;
     String NowDrawingShape;
 
     ArrayList<Shapes> Memory;
 
+    StringBuffer Input;
+
     public Board() {
         Memory = new ArrayList<>();
+        Input = new StringBuffer();
         NowDrawingShape = "Line";
         NowDrawingColor = Color.BLACK;
-        IsDrawing = false;
+        IsDrawingFinished = false;
+        IsWritingFinished = false;
         NowDrawingWidth = 1;
         x1 = x2 = y1 = y2 = -1;
         this.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         addMouseListener(this);
         addMouseMotionListener(this);
-        setPreferredSize(new Dimension(1000, 600));
+        addKeyListener(this);
+        setPreferredSize(new Dimension(1000, 800));
     }
 
     public void SetShape(String Shape) {
         NowDrawingShape = Shape;
     }
 
-    public void SetColor(Color color) {
-        NowDrawingColor = color;
+    public void SetColor(Color Color) {
+        NowDrawingColor = Color;
+    }
+
+    public void SetWidth(float Width) {
+        NowDrawingWidth = Width;
     }
 
     @Override
@@ -47,21 +54,35 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         for (Shapes a : Memory)
             MyDrawShape(temp, a, true);
 
-        Shapes Info = new Shapes(NowDrawingShape, x1, y1, x2, y2, NowDrawingWidth, NowDrawingColor);
-        MyDrawShape(temp, Info, !IsDrawing);
-        if (!IsDrawing)
-            Memory.add(Info);
+        Shapes Info;
+        if (NowDrawingShape.equals("Text")) {
+            Info = new Shapes(NowDrawingShape, x1, y1, -1, -1, -1, NowDrawingColor, Input.toString());
+            MyDrawShape(temp, Info, true);
+            if (IsWritingFinished) {
+                Memory.add(Info);
+                Input.delete(0, Input.length());
+                IsWritingFinished = false;
+            }
+        } else {
+            Info = new Shapes(NowDrawingShape, x1, y1, x2, y2, NowDrawingWidth, NowDrawingColor, null);
+            MyDrawShape(temp, Info, !IsDrawingFinished);
+            if (!IsDrawingFinished)
+                Memory.add(Info);
+        }
         temp.dispose();
     }
 
     private void MyDrawShape(Graphics2D temp, Shapes a, boolean IsRealDraw) {
-        if (IsRealDraw) {
+        if (a.Kind.equals("Text")) {
+            temp.setColor(a.color);
+            Font NowFont = new Font("楷体", Font.BOLD, 40);
+            temp.setFont(NowFont);
+        } else if (IsRealDraw) {
             temp.setColor(a.color);
             temp.setStroke(new BasicStroke(a.width));
-        }
-        else {
-            temp.setColor(NowDrawingColor);
-            temp.setStroke(new BasicStroke(NowDrawingWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 10.0f, new float[]{10, 10}, 0));
+        } else {
+            temp.setColor(a.color);
+            temp.setStroke(new BasicStroke(a.width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 10.0f, new float[]{10, 10}, 0));
         }
 
         switch (a.Kind) {
@@ -74,19 +95,28 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
             case "Circle":
                 temp.drawOval(Math.min(a.x1, a.x2), Math.min(a.y1, a.y2), Math.abs(a.x1 - a.x2), Math.abs(a.y1 - a.y2));
                 break;
+            case "Text":
+                temp.drawString(a.Info, a.x1, a.y1);
+                break;
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!IsDrawing) {
+        if (!NowDrawingShape.equals("Text")) {
+            if (!IsDrawingFinished) {
+                x1 = e.getX();
+                y1 = e.getY();
+                IsDrawingFinished = true;
+            } else {
+                x2 = e.getX();
+                y2 = e.getY();
+                IsDrawingFinished = false;
+                repaint();
+            }
+        } else if (!IsWritingFinished){
             x1 = e.getX();
             y1 = e.getY();
-            IsDrawing = true;
-        } else {
-            x2 = e.getX();
-            y2 = e.getY();
-            IsDrawing = false;
             repaint();
         }
     }
@@ -116,11 +146,31 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (IsDrawing) {
+        if (IsDrawingFinished && !NowDrawingShape.equals("Text")) {
             x2 = e.getX();
             y2 = e.getY();
             repaint();
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyCode() != KeyEvent.VK_ENTER) {
+            Input.append(e.getKeyChar());
+            repaint();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            IsWritingFinished = true;
+            repaint();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 }
 
@@ -131,7 +181,9 @@ class Shapes {
     float width;
     Color color;
 
-    Shapes(String Kind, int x1, int y1, int x2, int y2, float width, Color color) {
+    String Info;
+
+    Shapes(String Kind, int x1, int y1, int x2, int y2, float width, Color color, String Info) {
         this.Kind = Kind;
         this.x1 = x1;
         this.y1 = y1;
@@ -139,5 +191,6 @@ class Shapes {
         this.y2 = y2;
         this.width = width;
         this.color = color;
+        this.Info = Info;
     }
 }
