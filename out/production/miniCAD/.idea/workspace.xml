@@ -4,19 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Board.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Buttons.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Layout.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyFrame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniCAD.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniCAD.java" afterDir="false" />
+    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="git add .">
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/Board.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/ButtonHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/Buttons.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/Layout.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/MyFrame.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/miniCAD.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/miniCAD/miniCAD.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,13 +51,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Java&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "D:/Java",
+    "settings.editor.selected.configurable": "vcs.Git"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="miniCAD" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="miniCAD" />
@@ -78,6 +82,14 @@
       <option name="presentableId" value="Default" />
       <updated>1667489399251</updated>
     </task>
+    <task id="LOCAL-00001" summary="git add .">
+      <created>1668483217517</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1668483217517</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -90,5 +102,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="git add ." />
+    <option name="LAST_COMMIT_MESSAGE" value="git add ." />
   </component>
 </project>
