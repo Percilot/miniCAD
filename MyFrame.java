@@ -7,7 +7,7 @@ public class MyFrame extends JFrame {
         this.setSize(1000, 1000);
         this.setResizable(false);
         this.setBackground(Color.WHITE);
-        this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
 }

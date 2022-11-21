@@ -4,8 +4,13 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Board extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
-    int x1, y1;
-    int x2, y2;
+    int DrawingStartPointX, DrawingStartPointY;
+    int DrawingEndPointX, DrawingEndPointY;
+
+    int WritingStartPointX, WritingStartPointY;
+
+    final int ILLEGAL = -1;
+
     Color NowDrawingColor;
     float NowDrawingWidth;
     boolean IsDrawing;
@@ -25,7 +30,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         IsDrawing = false;
         IsWritingFinished = false;
         NowDrawingWidth = 1;
-        x1 = x2 = y1 = y2 = -1;
+        DrawingStartPointX = DrawingEndPointX = DrawingStartPointY = DrawingEndPointY = WritingStartPointX = WritingStartPointY = ILLEGAL;
         this.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -35,6 +40,12 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     public void SetShape(String Shape) {
         NowDrawingShape = Shape;
+        DrawingStartPointX = DrawingEndPointX = DrawingStartPointY = DrawingEndPointY = WritingStartPointX = WritingStartPointY = ILLEGAL;
+        IsDrawing = false;
+        IsWritingFinished = false;
+        Input.delete(0, Input.length());
+        if (Shape.equals("Text"))
+            requestFocusInWindow();
     }
 
     public void SetColor(Color Color) {
@@ -56,18 +67,22 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
         Shapes Info;
         if (NowDrawingShape.equals("Text")) {
-            Info = new Shapes(NowDrawingShape, x1, y1, -1, -1, -1, NowDrawingColor, Input.toString());
+            Info = new Shapes(NowDrawingShape, WritingStartPointX, WritingStartPointY, ILLEGAL, ILLEGAL, -1, NowDrawingColor, Input.toString());
             MyDrawShape(temp, Info, true);
             if (IsWritingFinished) {
                 Memory.add(Info);
                 Input.delete(0, Input.length());
                 IsWritingFinished = false;
+                WritingStartPointX = WritingStartPointY = ILLEGAL;
             }
         } else {
-            Info = new Shapes(NowDrawingShape, x1, y1, x2, y2, NowDrawingWidth, NowDrawingColor, null);
+            Info = new Shapes(NowDrawingShape, DrawingStartPointX, DrawingStartPointY, DrawingEndPointX, DrawingEndPointY, NowDrawingWidth, NowDrawingColor, null);
             MyDrawShape(temp, Info, !IsDrawing);
             if (!IsDrawing)
+            {
+                DrawingStartPointX = DrawingStartPointY = DrawingEndPointX = DrawingEndPointY = ILLEGAL;
                 Memory.add(Info);
+            }
         }
         temp.dispose();
     }
@@ -103,21 +118,25 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!NowDrawingShape.equals("Text")) {
-            if (!IsDrawing) {
-                x1 = e.getX();
-                y1 = e.getY();
+        if (NowDrawingShape.equals("Text") && !IsWritingFinished) {
+            WritingStartPointX = e.getX();
+            WritingStartPointY = e.getY();
+        }
+        else
+        {
+            if (DrawingStartPointX == ILLEGAL || DrawingStartPointY == ILLEGAL) {
+                DrawingStartPointX = e.getX();
+                DrawingStartPointY = e.getY();
                 IsDrawing = true;
-            } else {
-                x2 = e.getX();
-                y2 = e.getY();
+
+            }
+            else {
+                DrawingEndPointX = e.getX();
+                DrawingEndPointY = e.getY();
                 IsDrawing = false;
                 repaint();
             }
-        } else if (!IsWritingFinished){
-            x1 = e.getX();
-            y1 = e.getY();
-            repaint();
+
         }
     }
 
@@ -147,8 +166,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     @Override
     public void mouseMoved(MouseEvent e) {
         if (IsDrawing && !NowDrawingShape.equals("Text")) {
-            x2 = e.getX();
-            y2 = e.getY();
+            DrawingEndPointX = e.getX();
+            DrawingEndPointY = e.getY();
             repaint();
         }
     }
