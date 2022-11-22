@@ -9,13 +9,17 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     int WritingStartPointX, WritingStartPointY;
 
+    int SelectShapeID;
+
     final int ILLEGAL = -1;
 
     Color NowDrawingColor;
     float NowDrawingWidth;
     boolean IsDrawing;
-
     boolean IsWritingFinished;
+    boolean IsSelectingShape;
+
+    boolean IsSelectingFinished;
     String NowDrawingShape;
 
     ArrayList<Shapes> Memory;
@@ -28,8 +32,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         NowDrawingShape = "Line";
         NowDrawingColor = Color.BLACK;
         IsDrawing = false;
+        IsSelectingShape = false;
+        IsSelectingFinished = false;
         IsWritingFinished = false;
         NowDrawingWidth = 1;
+        SelectShapeID = ILLEGAL;
         DrawingStartPointX = DrawingEndPointX = DrawingStartPointY = DrawingEndPointY = WritingStartPointX = WritingStartPointY = ILLEGAL;
         this.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         addMouseListener(this);
@@ -43,17 +50,31 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         DrawingStartPointX = DrawingEndPointX = DrawingStartPointY = DrawingEndPointY = WritingStartPointX = WritingStartPointY = ILLEGAL;
         IsDrawing = false;
         IsWritingFinished = false;
+        IsSelectingShape = false;
+        IsSelectingFinished = false;
         Input.delete(0, Input.length());
         if (Shape.equals("Text"))
             requestFocusInWindow();
     }
 
     public void SetColor(Color Color) {
+        IsSelectingShape = false;
+        IsSelectingFinished = false;
         NowDrawingColor = Color;
     }
 
     public void SetWidth(float Width) {
+        IsSelectingShape = false;
+        IsSelectingFinished = false;
         NowDrawingWidth = Width;
+    }
+
+    public void SetModel(String Model) {
+        IsSelectingShape = !Model.equals("Draw");
+        IsSelectingFinished = false;
+
+        if (IsSelectingShape)
+            requestFocusInWindow();
     }
 
     @Override
@@ -66,7 +87,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             MyDrawShape(temp, a, true);
 
         Shapes Info;
-        if (NowDrawingShape.equals("Text")) {
+        if (NowDrawingShape.equals("Text") && WritingStartPointX != ILLEGAL && WritingStartPointY != ILLEGAL) {
             Info = new Shapes(NowDrawingShape, WritingStartPointX, WritingStartPointY, ILLEGAL, ILLEGAL, -1, NowDrawingColor, Input.toString());
             MyDrawShape(temp, Info, true);
             if (IsWritingFinished) {
@@ -76,12 +97,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
                 WritingStartPointX = WritingStartPointY = ILLEGAL;
             }
         } else {
-            Info = new Shapes(NowDrawingShape, DrawingStartPointX, DrawingStartPointY, DrawingEndPointX, DrawingEndPointY, NowDrawingWidth, NowDrawingColor, null);
-            MyDrawShape(temp, Info, !IsDrawing);
-            if (!IsDrawing)
-            {
-                DrawingStartPointX = DrawingStartPointY = DrawingEndPointX = DrawingEndPointY = ILLEGAL;
-                Memory.add(Info);
+            if (DrawingStartPointX != ILLEGAL && DrawingStartPointY != ILLEGAL && DrawingEndPointX != ILLEGAL && DrawingEndPointY != ILLEGAL) {
+                Info = new Shapes(NowDrawingShape, DrawingStartPointX, DrawingStartPointY, DrawingEndPointX, DrawingEndPointY, NowDrawingWidth, NowDrawingColor, null);
+                MyDrawShape(temp, Info, !IsDrawing);
+                if (!IsDrawing) {
+                    DrawingStartPointX = DrawingStartPointY = DrawingEndPointX = DrawingEndPointY = ILLEGAL;
+                    Memory.add(Info);
+                }
             }
         }
         temp.dispose();
@@ -118,25 +140,43 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (NowDrawingShape.equals("Text") && !IsWritingFinished) {
-            WritingStartPointX = e.getX();
-            WritingStartPointY = e.getY();
-        }
-        else
-        {
-            if (DrawingStartPointX == ILLEGAL || DrawingStartPointY == ILLEGAL) {
-                DrawingStartPointX = e.getX();
-                DrawingStartPointY = e.getY();
-                IsDrawing = true;
+        if (!IsSelectingShape) {
+            if (NowDrawingShape.equals("Text") && !IsWritingFinished) {
+                WritingStartPointX = e.getX();
+                WritingStartPointY = e.getY();
+            } else {
+                if (DrawingStartPointX == ILLEGAL || DrawingStartPointY == ILLEGAL) {
+                    DrawingStartPointX = e.getX();
+                    DrawingStartPointY = e.getY();
+                    IsDrawing = true;
 
+                } else {
+                    DrawingEndPointX = e.getX();
+                    DrawingEndPointY = e.getY();
+                    IsDrawing = false;
+                    repaint();
+                }
             }
-            else {
-                DrawingEndPointX = e.getX();
-                DrawingEndPointY = e.getY();
-                IsDrawing = false;
-                repaint();
-            }
+        } else {
+            int ClickPointX = e.getX();
+            int ClickPointY = e.getY();
+            double Shortest = -1;
+            double Distance;
+            if (!Memory.isEmpty()) {
+                for (int i = 0; i < Memory.size(); ++i) {
+                    if (Memory.get(i).Kind.equals("Text"))
+                        Distance = Math.pow(ClickPointX - Memory.get(i).x1, 2) + Math.pow(ClickPointY - Memory.get(i).y1, 2);
+                    else
+                        Distance = Math.pow(ClickPointX - ((Memory.get(i).x1 + Memory.get(i).x2) / 2.0), 2) + Math.pow(ClickPointY - ((Memory.get(i).y1 + Memory.get(i).y2) / 2.0), 2);
 
+                    if (Shortest < 0 || Distance < Shortest) {
+                        Shortest = Distance;
+                        SelectShapeID = i;
+                    }
+                }
+            }
+            if (IsSelectingShape)
+                System.out.print("Now select index " + SelectShapeID + "\n");
         }
     }
 
@@ -174,9 +214,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if (e.getKeyCode() != KeyEvent.VK_ENTER) {
-            Input.append(e.getKeyChar());
-            repaint();
+        if (!IsSelectingShape) {
+            if (e.getKeyCode() != KeyEvent.VK_ENTER) {
+                Input.append(e.getKeyChar());
+                repaint();
+            }
         }
     }
 
@@ -184,6 +226,14 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             IsWritingFinished = true;
+            repaint();
+        }
+
+        if (IsSelectingShape) {
+            System.out.println("Move");
+            Shapes SelectShape = Memory.get(SelectShapeID);
+            SelectShape.MoveUpOrDown(50);
+            Memory.set(SelectShapeID, SelectShape);
             repaint();
         }
     }
@@ -202,7 +252,7 @@ class Shapes {
 
     String Info;
 
-    Shapes(String Kind, int x1, int y1, int x2, int y2, float width, Color color, String Info) {
+    public Shapes(String Kind, int x1, int y1, int x2, int y2, float width, Color color, String Info) {
         this.Kind = Kind;
         this.x1 = x1;
         this.y1 = y1;
@@ -212,4 +262,11 @@ class Shapes {
         this.color = color;
         this.Info = Info;
     }
+
+    public void MoveUpOrDown(int delta) {
+        y1 -= delta;
+        y2 -= delta;
+    }
+
+
 }

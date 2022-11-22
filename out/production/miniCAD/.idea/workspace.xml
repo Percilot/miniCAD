@@ -4,23 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="支持图形和文字，利用Java自带的调色盘实现颜色切换">
-      <change afterPath="$PROJECT_DIR$/MyMenu.java" afterDir="false" />
+    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="重构代码结构，实现笔粗细的修改">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ColorMasterButtons.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Layout.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ShapeMasterButtons.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniCAD.java" beforeDir="false" afterPath="$PROJECT_DIR$/miniCAD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/Board.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/MyFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/MyFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/ShapeButtonHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/ShapeMasterButtons.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/miniCAD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/miniCAD.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,17 +43,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "ToolWindow运行.ShowToolbar": "false",
-    "last_opened_file_path": "D:/Java",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;ToolWindow运行.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/miniCAD&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="miniCAD" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="miniCAD" />
@@ -90,6 +80,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1667489399251</updated>
+      <workItem from="1669053599080" duration="141000" />
+      <workItem from="1669053750482" duration="61000" />
+      <workItem from="1669083459402" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="git add .">
       <created>1668483217517</created>
@@ -161,8 +154,18 @@
       <option name="project" value="LOCAL" />
       <updated>1668518821594</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="重构代码结构，实现笔粗细的修改">
+      <created>1669042648910</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1669042648910</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -183,7 +186,8 @@
     <MESSAGE value="支持图形和文字，以及部分颜色切换" />
     <MESSAGE value="支持图形和文字，以及颜色切换，解决了一些非正常使用按钮时出现的Bug" />
     <MESSAGE value="支持图形和文字，利用Java自带的调色盘实现颜色切换" />
-    <option name="LAST_COMMIT_MESSAGE" value="支持图形和文字，利用Java自带的调色盘实现颜色切换" />
+    <MESSAGE value="重构代码结构，实现笔粗细的修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="重构代码结构，实现笔粗细的修改" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

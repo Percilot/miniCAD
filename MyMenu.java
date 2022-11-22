@@ -39,10 +39,15 @@ class ShapeMenu {
         JMenuItem ChooseWritingText = new JMenuItem("Text");
         ChooseWritingText.addActionListener(new ShapeHandler(DrawingBoard));
 
+        JMenuItem ChooseSelecting = new JMenuItem("Select");
+        ChooseSelecting.addActionListener(new ShapeHandler(DrawingBoard));
+
         Shape.add(ChooseDrawingLine);
         Shape.add(ChooseDrawingRect);
         Shape.add(ChooseDrawingCircle);
         Shape.add(ChooseWritingText);
+
+        Shape.add(ChooseSelecting);
     }
 
     public JMenu GetMenu() {
@@ -60,7 +65,12 @@ class ShapeHandler implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String Info = e.getActionCommand();
-        Target.SetShape(Info);
+        if (Info.equals("Select")) {
+            System.out.println("Select 0");
+            Target.SetModel("Select");
+        }
+        else
+            Target.SetShape(Info);
     }
 }
 
