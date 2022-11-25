@@ -200,8 +200,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             }
             else
                 SelectShapeID = ILLEGAL;
-            if (IsSelectingShape)
-                System.out.print("Now select index " + SelectShapeID + "\n");
         }
     }
 
@@ -251,7 +249,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER && NowDrawingShape.equals("Text")) {
             IsWritingFinished = true;
             repaint();
         }
@@ -273,8 +271,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
                 case KeyEvent.VK_RIGHT:
                     SelectShape.MoveLeftOrRight(10);
                     break;
+                case KeyEvent.VK_DELETE:
+                    Memory.remove(SelectShapeID);
+                    SelectShapeID = ILLEGAL;
+                    break;
             }
-            Memory.set(SelectShapeID, SelectShape);
+            if (SelectShapeID != ILLEGAL)
+                Memory.set(SelectShapeID, SelectShape);
             repaint();
         }
     }
