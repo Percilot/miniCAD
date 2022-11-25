@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.io.*;
 
 public class MyMenu {
 
@@ -14,9 +15,13 @@ public class MyMenu {
 
         ShapeMenu MyShapeMenu = new ShapeMenu(TotalBoard);
         PenMenu MyPenMenu = new PenMenu(TotalBoard);
+        SelectMenu MySelectMenu = new SelectMenu(TotalBoard);
+        FileMenu MyFileMenu = new FileMenu(TotalBoard);
 
         MenuBar.add(MyShapeMenu.GetMenu());
         MenuBar.add(MyPenMenu.GetMenu());
+        MenuBar.add(MySelectMenu.GetMenu());
+        MenuBar.add(MyFileMenu.GetMenu());
         MenuBar.setBounds(0, 0, 800, 30);
     }
 
@@ -39,15 +44,11 @@ class ShapeMenu {
         JMenuItem ChooseWritingText = new JMenuItem("Text");
         ChooseWritingText.addActionListener(new ShapeHandler(DrawingBoard));
 
-        JMenuItem ChooseSelecting = new JMenuItem("Select");
-        ChooseSelecting.addActionListener(new ShapeHandler(DrawingBoard));
-
         Shape.add(ChooseDrawingLine);
         Shape.add(ChooseDrawingRect);
         Shape.add(ChooseDrawingCircle);
         Shape.add(ChooseWritingText);
 
-        Shape.add(ChooseSelecting);
     }
 
     public JMenu GetMenu() {
@@ -65,12 +66,7 @@ class ShapeHandler implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String Info = e.getActionCommand();
-        if (Info.equals("Select")) {
-            System.out.println("Select 0");
-            Target.SetModel("Select");
-        }
-        else
-            Target.SetShape(Info);
+        Target.SetShape(Info);
     }
 }
 
@@ -86,14 +82,14 @@ class PenMenu {
         JMenuItem ChoosePenWidth = new JMenuItem("PenSize");
         ChoosePenColor.addActionListener(e -> {
             Color color = JColorChooser.showDialog(ChoosePenColor, "Select pen color", Color.lightGray);
-            if (color == null)
-                color = Color.BLACK;
+            if (color == null) color = Color.BLACK;
             Target.SetColor(color);
         });
         ChoosePenWidth.addActionListener(new PenSizeHandler(DrawingBoard));
         PenAttribute.add(ChoosePenColor);
         PenAttribute.add(ChoosePenWidth);
     }
+
     public JMenu GetMenu() {
         return PenAttribute;
     }
@@ -131,8 +127,7 @@ class PenSizeHandler implements ActionListener, AdjustmentListener {
         JButton Confirm = new JButton("Confirm");
         Confirm.addActionListener(e1 -> {
             String Info = e1.getActionCommand();
-            if (Info.equals("Confirm"))
-                Target.SetWidth((float)(Width / 10));
+            if (Info.equals("Confirm")) Target.SetWidth((float) (Width / 10));
         });
 
         container.add(Reminder, BorderLayout.NORTH);
@@ -145,6 +140,115 @@ class PenSizeHandler implements ActionListener, AdjustmentListener {
         if (e.getSource() == ScrollBar) {
             Reminder.setText("当前字号： " + e.getValue());
             Width = e.getValue();
+        }
+    }
+}
+
+class SelectMenu {
+    private final JMenu Select;
+
+    public SelectMenu(Board DrawingBoard) {
+        Select = new JMenu("Select");
+        JMenuItem SelectShape = new JMenuItem("SelectShape");
+        SelectShape.addActionListener(new SelectHandler(DrawingBoard));
+        JMenuItem ChangeColor = new JMenuItem("ChangeColor");
+
+        ChangeColor.addActionListener(e -> {
+            Color color = JColorChooser.showDialog(ChangeColor, "Select new color", Color.lightGray);
+            if (color == null) color = Color.BLACK;
+            DrawingBoard.ChangeSelectColor(color);
+        });
+
+        Select.add(SelectShape);
+        Select.add(ChangeColor);
+    }
+
+    public JMenu GetMenu() {
+        return Select;
+    }
+}
+
+class SelectHandler implements ActionListener {
+    private final Board Target;
+
+    public SelectHandler(Board Target) {
+        this.Target = Target;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String Info = e.getActionCommand();
+        if (Info.equals("SelectShape")) {
+            Target.SetModel("Select");
+        }
+    }
+}
+
+class FileMenu {
+    private final JMenu File;
+
+    public FileMenu(Board NowDrawingBoard) {
+        File = new JMenu("File");
+
+        JMenuItem Save = new JMenuItem("Save");
+        Save.addActionListener(new MyFileHandler(NowDrawingBoard));
+        JMenuItem Open = new JMenuItem("Open");
+        Open.addActionListener(new MyFileHandler(NowDrawingBoard));
+
+        File.add(Save);
+        File.add(Open);
+    }
+
+    public JMenu GetMenu() {
+        return File;
+    }
+}
+
+class MyFileHandler implements ActionListener {
+    private final Board Target;
+
+    public MyFileHandler(Board Target) {
+        this.Target = Target;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFileChooser chooser = new JFileChooser();
+        if (e.getActionCommand().equals("Save")) {
+            int option = chooser.showSaveDialog(null);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                File TargetFile = chooser.getSelectedFile();
+                String FileName = TargetFile.getName();
+                if (!FileName.contains(".miniCAD"))
+                    TargetFile = new File(chooser.getCurrentDirectory(), FileName + ".miniCAD");
+
+                try {
+                    ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
+                    WriteToFile.writeObject(Target);
+                    WriteToFile.flush();
+                    WriteToFile.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } else if (e.getActionCommand().equals("Open")) {
+            String FileName = "";
+
+            int option = chooser.showOpenDialog(null);
+            if (option == JFileChooser.APPROVE_OPTION)
+                FileName = chooser.getSelectedFile().getPath();
+
+            System.out.println(FileName);
+            File TargetFile = new File(FileName);
+
+            try {
+                ObjectInputStream ReadFromFile = new ObjectInputStream(new FileInputStream(TargetFile));
+                Board Temp = (Board) ReadFromFile.readObject();
+                Target.SetMemory(Temp.GetMemory());
+                ReadFromFile.close();
+            } catch (IOException | ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }

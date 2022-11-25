@@ -8,13 +8,21 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniCAD.java" beforeDir="false" afterPath="$PROJECT_DIR$/miniCAD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/Board.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/miniCAD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/miniCAD.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
@@ -28,6 +36,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Board.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -51,6 +62,10 @@
     &quot;ToolWindow运行.ShowToolbar&quot;: &quot;false&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/miniCAD&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
@@ -83,6 +98,15 @@
       <workItem from="1669053599080" duration="141000" />
       <workItem from="1669053750482" duration="61000" />
       <workItem from="1669083459402" duration="28000" />
+      <workItem from="1669083932957" duration="215000" />
+      <workItem from="1669099537594" duration="2300000" />
+      <workItem from="1669128234646" duration="3921000" />
+      <workItem from="1669223315669" duration="501000" />
+      <workItem from="1669260667933" duration="1315000" />
+      <workItem from="1669262234361" duration="29000" />
+      <workItem from="1669272483997" duration="1206000" />
+      <workItem from="1669357050510" duration="7071000" />
+      <workItem from="1669378847681" duration="1184000" />
     </task>
     <task id="LOCAL-00001" summary="git add .">
       <created>1668483217517</created>
@@ -161,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669042648910</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="重构代码结构，实现笔粗细的修改">
+      <created>1669084081747</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1669084081747</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,30 +1,31 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 
-public class Board extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
-    int DrawingStartPointX, DrawingStartPointY;
-    int DrawingEndPointX, DrawingEndPointY;
+public class Board extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener , KeyListener, Serializable {
+    transient int DrawingStartPointX, DrawingStartPointY;
+    transient int DrawingEndPointX, DrawingEndPointY;
 
-    int WritingStartPointX, WritingStartPointY;
+    transient int WritingStartPointX, WritingStartPointY;
 
-    int SelectShapeID;
+    transient int SelectShapeID;
 
-    final int ILLEGAL = -1;
+    transient final int ILLEGAL = -1;
 
-    Color NowDrawingColor;
-    float NowDrawingWidth;
-    boolean IsDrawing;
-    boolean IsWritingFinished;
-    boolean IsSelectingShape;
+    transient Color NowDrawingColor;
+    transient float NowDrawingWidth;
+    transient boolean IsDrawing;
+    transient boolean IsWritingFinished;
+    transient boolean IsSelectingShape;
 
-    boolean IsSelectingFinished;
-    String NowDrawingShape;
+    transient boolean IsSelectingFinished;
+    transient String NowDrawingShape;
 
     ArrayList<Shapes> Memory;
 
-    StringBuffer Input;
+    transient StringBuffer Input;
 
     public Board() {
         Memory = new ArrayList<>();
@@ -42,6 +43,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
+        addMouseWheelListener(this);
         setPreferredSize(new Dimension(1000, 800));
     }
 
@@ -52,6 +54,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         IsWritingFinished = false;
         IsSelectingShape = false;
         IsSelectingFinished = false;
+        SelectShapeID = ILLEGAL;
         Input.delete(0, Input.length());
         if (Shape.equals("Text"))
             requestFocusInWindow();
@@ -60,32 +63,52 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     public void SetColor(Color Color) {
         IsSelectingShape = false;
         IsSelectingFinished = false;
+        SelectShapeID = ILLEGAL;
         NowDrawingColor = Color;
     }
 
     public void SetWidth(float Width) {
         IsSelectingShape = false;
         IsSelectingFinished = false;
+        SelectShapeID = ILLEGAL;
         NowDrawingWidth = Width;
     }
 
     public void SetModel(String Model) {
         IsSelectingShape = !Model.equals("Draw");
         IsSelectingFinished = false;
+        SelectShapeID = ILLEGAL;
 
         if (IsSelectingShape)
             requestFocusInWindow();
+    }
+
+    public ArrayList<Shapes> GetMemory() {
+        return this.Memory;
+    }
+
+    public void SetMemory(ArrayList<Shapes> Memory) {
+        this.Memory = Memory;
+        repaint();
+    }
+
+    public void ChangeSelectColor(Color color) {
+        if (SelectShapeID != ILLEGAL) {
+            Shapes SelectShape = Memory.get(SelectShapeID);
+            SelectShape.ChangeColor(color);
+            Memory.set(SelectShapeID, SelectShape);
+            repaint();
+        }
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D temp = (Graphics2D) g;
-        temp.setColor(NowDrawingColor);
-
         for (Shapes a : Memory)
             MyDrawShape(temp, a, true);
 
+        temp.setColor(NowDrawingColor);
         Shapes Info;
         if (NowDrawingShape.equals("Text") && WritingStartPointX != ILLEGAL && WritingStartPointY != ILLEGAL) {
             Info = new Shapes(NowDrawingShape, WritingStartPointX, WritingStartPointY, ILLEGAL, ILLEGAL, -1, NowDrawingColor, Input.toString());
@@ -175,6 +198,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
                     }
                 }
             }
+            else
+                SelectShapeID = ILLEGAL;
             if (IsSelectingShape)
                 System.out.print("Now select index " + SelectShapeID + "\n");
         }
@@ -182,10 +207,12 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void mousePressed(MouseEvent e) {
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+
     }
 
     @Override
@@ -229,10 +256,24 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             repaint();
         }
 
-        if (IsSelectingShape) {
-            System.out.println("Move");
+        if (IsSelectingShape && SelectShapeID != ILLEGAL)
+        {
             Shapes SelectShape = Memory.get(SelectShapeID);
-            SelectShape.MoveUpOrDown(50);
+            switch (e.getKeyCode())
+            {
+                case KeyEvent.VK_UP:
+                    SelectShape.MoveUpOrDown(-10);
+                    break;
+                case KeyEvent.VK_DOWN:
+                    SelectShape.MoveUpOrDown(10);
+                    break;
+                case KeyEvent.VK_LEFT:
+                    SelectShape.MoveLeftOrRight(-10);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    SelectShape.MoveLeftOrRight(10);
+                    break;
+            }
             Memory.set(SelectShapeID, SelectShape);
             repaint();
         }
@@ -241,9 +282,20 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     @Override
     public void keyReleased(KeyEvent e) {
     }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if (IsSelectingShape && SelectShapeID != ILLEGAL) {
+            Shapes SelectShape = Memory.get(SelectShapeID);
+            SelectShape.Zoom(-1 * e.getWheelRotation());
+            Memory.set(SelectShapeID, SelectShape);
+            repaint();
+        }
+    }
+
 }
 
-class Shapes {
+class Shapes implements Serializable{
     String Kind;
     int x1, y1;
     int x2, y2;
@@ -264,9 +316,21 @@ class Shapes {
     }
 
     public void MoveUpOrDown(int delta) {
-        y1 -= delta;
-        y2 -= delta;
+        y1 += delta;
+        y2 += delta;
     }
 
+    public void MoveLeftOrRight(int delta) {
+        x1 += delta;
+        x2 += delta;
+    }
 
+    public void Zoom(int delta) {
+        x2 += delta * ((x2 - x1) / 10);
+        y2 += delta * ((y2 - y1) / 10);
+    }
+
+    public void ChangeColor(Color NewColor) {
+        color = NewColor;
+    }
 }

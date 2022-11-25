@@ -5,9 +5,9 @@ public class miniCAD {
         MyMenu TotalMenu = new MyMenu(TotalBoard);
 
         TotalFrame.setJMenuBar(TotalMenu.GetMenuBar());
-        TotalFrame.setVisible(true);
 
         TotalFrame.getContentPane().add(TotalBoard);
+        TotalFrame.setVisible(true);
         TotalFrame.pack();
     }
 }
