@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -214,13 +215,17 @@ class MyFileHandler implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
+
         if (e.getActionCommand().equals("Save")) {
+            chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
             int option = chooser.showSaveDialog(null);
             if (option == JFileChooser.APPROVE_OPTION) {
                 File TargetFile = chooser.getSelectedFile();
                 String FileName = TargetFile.getName();
-                if (!FileName.contains(".miniCAD"))
-                    TargetFile = new File(chooser.getCurrentDirectory(), FileName + ".miniCAD");
+
+                if (!FileName.endsWith(".miniCAD"))
+                    FileName = FileName + ".miniCAD";
+                TargetFile = new File(chooser.getCurrentDirectory(), FileName);
 
                 try {
                     ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
@@ -232,13 +237,18 @@ class MyFileHandler implements ActionListener {
                 }
             }
         } else if (e.getActionCommand().equals("Open")) {
-            String FileName = "";
 
+
+            String FileName = "";
+            chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
             int option = chooser.showOpenDialog(null);
             if (option == JFileChooser.APPROVE_OPTION)
                 FileName = chooser.getSelectedFile().getPath();
 
             System.out.println(FileName);
+
+            if (FileName.isEmpty())
+                return;
             File TargetFile = new File(FileName);
 
             try {

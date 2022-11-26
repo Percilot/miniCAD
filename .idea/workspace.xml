@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="实现保存和重新打开文件">
-      <change beforePath="$PROJECT_DIR$/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/Board.java" afterDir="false" />
+    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="实现保存和重新打开文件，实现删除图形">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +100,11 @@
       <workItem from="1669272483997" duration="1206000" />
       <workItem from="1669357050510" duration="7071000" />
       <workItem from="1669378847681" duration="1488000" />
+      <workItem from="1669381690849" duration="355000" />
+      <workItem from="1669392412160" duration="145000" />
+      <workItem from="1669393290029" duration="786000" />
+      <workItem from="1669394369151" duration="20000" />
+      <workItem from="1669444100180" duration="1396000" />
     </task>
     <task id="LOCAL-00001" summary="git add .">
       <created>1668483217517</created>
