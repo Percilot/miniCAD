@@ -32,6 +32,19 @@ public class MyMenu {
 }
 
 class ShapeMenu {
+    static class ShapeHandler implements ActionListener {
+        private final Board Target;
+
+        ShapeHandler(Board Target) {
+            this.Target = Target;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String Info = e.getActionCommand();
+            Target.SetShape(Info);
+        }
+    }
     private final JMenu Shape;
 
     public ShapeMenu(Board DrawingBoard) {
@@ -57,21 +70,108 @@ class ShapeMenu {
     }
 }
 
-class ShapeHandler implements ActionListener {
-    private final Board Target;
-
-    ShapeHandler(Board Target) {
-        this.Target = Target;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String Info = e.getActionCommand();
-        Target.SetShape(Info);
-    }
-}
-
 class PenMenu {
+
+    static class PenSizeHandler implements ActionListener, AdjustmentListener {
+        private final Board Target;
+        private JScrollBar ScrollBar;
+        private JLabel Reminder;
+
+        private int Width;
+
+        public PenSizeHandler(Board Target) {
+            this.Target = Target;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Width = (int) ((Target.NowDrawingWidth) * 10);
+            JFrame setPenWidth = new JFrame("Set pen width");
+            Container container = setPenWidth.getContentPane();
+
+            ScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, Width, 1, 10, 100);
+            ScrollBar.setUnitIncrement(1);
+            ScrollBar.setBlockIncrement(5);
+            ScrollBar.addAdjustmentListener(this);
+
+            Reminder = new JLabel("当前画笔粗细： " + Width, SwingConstants.CENTER);
+
+            setPenWidth.setSize(600, 200);
+            setPenWidth.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            setPenWidth.setResizable(false);
+            setPenWidth.setVisible(true);
+
+            JButton Confirm = new JButton("Confirm");
+            Confirm.addActionListener(e1 -> {
+                String Info = e1.getActionCommand();
+                if (Info.equals("Confirm")) Target.SetWidth((float) (Width / 10));
+                setPenWidth.dispose();
+            });
+
+            container.add(Reminder, BorderLayout.NORTH);
+            container.add(ScrollBar, BorderLayout.CENTER);
+            container.add(Confirm, BorderLayout.SOUTH);
+        }
+
+        @Override
+        public void adjustmentValueChanged(AdjustmentEvent e) {
+            if (e.getSource() == ScrollBar) {
+                Reminder.setText("当前画笔粗细： " + e.getValue());
+                Width = e.getValue();
+            }
+        }
+    }
+
+    static class CharSizeHandler implements ActionListener, AdjustmentListener {
+        private final Board Target;
+        private JScrollBar ScrollBar;
+        private JLabel Reminder;
+
+        private int CharSize;
+
+        public CharSizeHandler(Board Target) {
+            this.Target = Target;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            CharSize = Target.NowWritingSize;
+            JFrame setCharSize = new JFrame("Set char size");
+            Container container = setCharSize.getContentPane();
+
+            ScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, CharSize, 1, 10, 100);
+            ScrollBar.setUnitIncrement(1);
+            ScrollBar.setBlockIncrement(5);
+            ScrollBar.addAdjustmentListener(this);
+
+            Reminder = new JLabel("当前字号： " + CharSize, SwingConstants.CENTER);
+
+            setCharSize.setSize(600, 200);
+            setCharSize.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            setCharSize.setResizable(false);
+            setCharSize.setVisible(true);
+
+            JButton Confirm = new JButton("Confirm");
+            Confirm.addActionListener(e1 -> {
+                String Info = e1.getActionCommand();
+                if (Info.equals("Confirm")) Target.SetCharSize(CharSize);
+                setCharSize.dispose();
+            });
+
+            container.add(Reminder, BorderLayout.NORTH);
+            container.add(ScrollBar, BorderLayout.CENTER);
+            container.add(Confirm, BorderLayout.SOUTH);
+        }
+
+        @Override
+        public void adjustmentValueChanged(AdjustmentEvent e) {
+            if (e.getSource() == ScrollBar) {
+                Reminder.setText("当前字号： " + e.getValue());
+                CharSize = e.getValue();
+            }
+        }
+    }
+
     private final JMenu PenAttribute;
 
     private final Board Target;
@@ -79,16 +179,23 @@ class PenMenu {
     public PenMenu(Board DrawingBoard) {
         PenAttribute = new JMenu("PenAttribute");
         Target = DrawingBoard;
+
         JMenuItem ChoosePenColor = new JMenuItem("Color");
         JMenuItem ChoosePenWidth = new JMenuItem("PenSize");
+        JMenuItem ChooseCharSize = new JMenuItem("CharSize");
+
         ChoosePenColor.addActionListener(e -> {
             Color color = JColorChooser.showDialog(ChoosePenColor, "Select pen color", Color.lightGray);
             if (color == null) color = Color.BLACK;
             Target.SetColor(color);
         });
         ChoosePenWidth.addActionListener(new PenSizeHandler(DrawingBoard));
+        ChooseCharSize.addActionListener(new CharSizeHandler(DrawingBoard));
+
+
         PenAttribute.add(ChoosePenColor);
         PenAttribute.add(ChoosePenWidth);
+        PenAttribute.add(ChooseCharSize);
     }
 
     public JMenu GetMenu() {
@@ -96,56 +203,22 @@ class PenMenu {
     }
 }
 
-class PenSizeHandler implements ActionListener, AdjustmentListener {
-    private final Board Target;
-    private JScrollBar ScrollBar;
-    private JLabel Reminder;
+class SelectMenu {
+    static class SelectHandler implements ActionListener {
+        private final Board Target;
 
-    private int Width;
+        public SelectHandler(Board Target) {
+            this.Target = Target;
+        }
 
-    public PenSizeHandler(Board Target) {
-        this.Target = Target;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Width = 10;
-        JFrame setPenWidth = new JFrame("Set pen width");
-        Container container = setPenWidth.getContentPane();
-
-        ScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 10, 1, 10, 100);
-        ScrollBar.setUnitIncrement(1);
-        ScrollBar.setBlockIncrement(5);
-        ScrollBar.addAdjustmentListener(this);
-
-        Reminder = new JLabel("当前字号： 1", SwingConstants.CENTER);
-
-        setPenWidth.setSize(600, 200);
-        setPenWidth.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setPenWidth.setResizable(false);
-        setPenWidth.setVisible(true);
-
-        JButton Confirm = new JButton("Confirm");
-        Confirm.addActionListener(e1 -> {
-            String Info = e1.getActionCommand();
-            if (Info.equals("Confirm")) Target.SetWidth((float) (Width / 10));
-        });
-
-        container.add(Reminder, BorderLayout.NORTH);
-        container.add(ScrollBar, BorderLayout.CENTER);
-        container.add(Confirm, BorderLayout.SOUTH);
-    }
-
-    @Override
-    public void adjustmentValueChanged(AdjustmentEvent e) {
-        if (e.getSource() == ScrollBar) {
-            Reminder.setText("当前字号： " + e.getValue());
-            Width = e.getValue();
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String Info = e.getActionCommand();
+            if (Info.equals("SelectShape")) {
+                Target.SetModel("Select");
+            }
         }
     }
-}
-
-class SelectMenu {
     private final JMenu Select;
 
     public SelectMenu(Board DrawingBoard) {
@@ -168,64 +241,74 @@ class SelectMenu {
         return Select;
     }
 }
+class FileMenu {
+    class MyFileHandler implements ActionListener {
+        private final Board Target;
 
-class SelectHandler implements ActionListener {
-    private final Board Target;
+        public MyFileHandler(Board Target) {
+            this.Target = Target;
+        }
 
-    public SelectHandler(Board Target) {
-        this.Target = Target;
-    }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser chooser = new JFileChooser();
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String Info = e.getActionCommand();
-        if (Info.equals("SelectShape")) {
-            Target.SetModel("Select");
+            if (e.getActionCommand().equals("Save to new file")) {
+                chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
+                int option = chooser.showSaveDialog(null);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    File TargetFile = chooser.getSelectedFile();
+                    String FileName = TargetFile.getName();
+
+                    if (!FileName.endsWith(".miniCAD"))
+                        FileName = FileName + ".miniCAD";
+                    TargetFile = new File(chooser.getCurrentDirectory(), FileName);
+
+                    try {
+                        ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
+                        WriteToFile.writeObject(Target);
+                        WriteToFile.flush();
+                        WriteToFile.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            } else if (e.getActionCommand().equals("Open")) {
+                String FileName = "";
+                chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
+                int option = chooser.showOpenDialog(null);
+                if (option == JFileChooser.APPROVE_OPTION)
+                    FileName = chooser.getSelectedFile().getPath();
+                if (FileName.isEmpty())
+                    return;
+                NowOpenFileName = FileName;
+                File TargetFile = new File(FileName);
+
+                try {
+                    ObjectInputStream ReadFromFile = new ObjectInputStream(new FileInputStream(TargetFile));
+                    Board Temp = (Board) ReadFromFile.readObject();
+                    Target.SetMemory(Temp.GetMemory());
+                    ReadFromFile.close();
+                } catch (IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
     }
-}
-
-class FileMenu {
     private final JMenu File;
+
+    private final Board Target;
+    private String NowOpenFileName;
 
     public FileMenu(Board NowDrawingBoard) {
         File = new JMenu("File");
+        this.Target = NowDrawingBoard;
+        NowOpenFileName = "";
 
         JMenuItem Save = new JMenuItem("Save");
-        Save.addActionListener(new MyFileHandler(NowDrawingBoard));
-        JMenuItem Open = new JMenuItem("Open");
-        Open.addActionListener(new MyFileHandler(NowDrawingBoard));
-
-        File.add(Save);
-        File.add(Open);
-    }
-
-    public JMenu GetMenu() {
-        return File;
-    }
-}
-
-class MyFileHandler implements ActionListener {
-    private final Board Target;
-
-    public MyFileHandler(Board Target) {
-        this.Target = Target;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JFileChooser chooser = new JFileChooser();
-
-        if (e.getActionCommand().equals("Save")) {
-            chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
-            int option = chooser.showSaveDialog(null);
-            if (option == JFileChooser.APPROVE_OPTION) {
-                File TargetFile = chooser.getSelectedFile();
-                String FileName = TargetFile.getName();
-
-                if (!FileName.endsWith(".miniCAD"))
-                    FileName = FileName + ".miniCAD";
-                TargetFile = new File(chooser.getCurrentDirectory(), FileName);
+        Save.addActionListener(e -> {
+            if (!NowOpenFileName.isEmpty()) {
+                File TargetFile = new File(NowOpenFileName);
 
                 try {
                     ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
@@ -236,29 +319,20 @@ class MyFileHandler implements ActionListener {
                     throw new RuntimeException(ex);
                 }
             }
-        } else if (e.getActionCommand().equals("Open")) {
 
+        });
 
-            String FileName = "";
-            chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
-            int option = chooser.showOpenDialog(null);
-            if (option == JFileChooser.APPROVE_OPTION)
-                FileName = chooser.getSelectedFile().getPath();
+        JMenuItem SaveToNewFile = new JMenuItem("Save to new file");
+        SaveToNewFile.addActionListener(new MyFileHandler(NowDrawingBoard));
+        JMenuItem Open = new JMenuItem("Open");
+        Open.addActionListener(new MyFileHandler(NowDrawingBoard));
 
-            System.out.println(FileName);
+        File.add(Save);
+        File.add(SaveToNewFile);
+        File.add(Open);
+    }
 
-            if (FileName.isEmpty())
-                return;
-            File TargetFile = new File(FileName);
-
-            try {
-                ObjectInputStream ReadFromFile = new ObjectInputStream(new FileInputStream(TargetFile));
-                Board Temp = (Board) ReadFromFile.readObject();
-                Target.SetMemory(Temp.GetMemory());
-                ReadFromFile.close();
-            } catch (IOException | ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
+    public JMenu GetMenu() {
+        return File;
     }
 }

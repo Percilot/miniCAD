@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="miniCAD:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="实现保存和重新打开文件，实现删除图形">
+    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/miniCAD_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/META-INF/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" afterDir="false" />
     </list>
@@ -51,6 +58,7 @@
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;ToolWindow运行.ShowToolbar&quot;: &quot;false&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/miniCAD&quot;,
@@ -58,6 +66,9 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;工件&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
@@ -103,6 +114,9 @@
       <workItem from="1669392412160" duration="145000" />
       <workItem from="1669393290029" duration="786000" />
       <workItem from="1669394369151" duration="20000" />
+      <workItem from="1669444100180" duration="2390000" />
+      <workItem from="1669514704797" duration="876000" />
+      <workItem from="1669634527884" duration="330000" />
     </task>
     <task id="LOCAL-00001" summary="git add .">
       <created>1668483217517</created>
@@ -195,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669380146119</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件">
+      <created>1669445803962</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1669445803962</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,7 +243,8 @@
     <MESSAGE value="支持图形和文字，利用Java自带的调色盘实现颜色切换" />
     <MESSAGE value="重构代码结构，实现笔粗细的修改" />
     <MESSAGE value="实现保存和重新打开文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="实现保存和重新打开文件" />
+    <MESSAGE value="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

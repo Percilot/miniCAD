@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Board extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener , KeyListener, Serializable {
+public class Board extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, Serializable {
     transient int DrawingStartPointX, DrawingStartPointY;
     transient int DrawingEndPointX, DrawingEndPointY;
 
@@ -19,9 +19,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     transient boolean IsDrawing;
     transient boolean IsWritingFinished;
     transient boolean IsSelectingShape;
-
     transient boolean IsSelectingFinished;
     transient String NowDrawingShape;
+
+    transient int NowWritingSize;
 
     ArrayList<Shapes> Memory;
 
@@ -37,6 +38,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         IsSelectingFinished = false;
         IsWritingFinished = false;
         NowDrawingWidth = 1;
+        NowWritingSize = 40;
         SelectShapeID = ILLEGAL;
         DrawingStartPointX = DrawingEndPointX = DrawingStartPointY = DrawingEndPointY = WritingStartPointX = WritingStartPointY = ILLEGAL;
         this.setBorder(BorderFactory.createLineBorder(Color.red, 5));
@@ -83,6 +85,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             requestFocusInWindow();
     }
 
+    public void SetCharSize(int CharSize) {
+        IsSelectingShape = false;
+        IsSelectingFinished = false;
+        SelectShapeID = ILLEGAL;
+        NowWritingSize = CharSize;
+    }
+
     public ArrayList<Shapes> GetMemory() {
         return this.Memory;
     }
@@ -111,7 +120,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         temp.setColor(NowDrawingColor);
         Shapes Info;
         if (NowDrawingShape.equals("Text") && WritingStartPointX != ILLEGAL && WritingStartPointY != ILLEGAL) {
-            Info = new Shapes(NowDrawingShape, WritingStartPointX, WritingStartPointY, ILLEGAL, ILLEGAL, -1, NowDrawingColor, Input.toString());
+            Info = new Shapes(NowDrawingShape, WritingStartPointX, WritingStartPointY, ILLEGAL, ILLEGAL, -1, NowWritingSize, NowDrawingColor, Input.toString());
             MyDrawShape(temp, Info, true);
             if (IsWritingFinished) {
                 Memory.add(Info);
@@ -121,7 +130,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             }
         } else {
             if (DrawingStartPointX != ILLEGAL && DrawingStartPointY != ILLEGAL && DrawingEndPointX != ILLEGAL && DrawingEndPointY != ILLEGAL) {
-                Info = new Shapes(NowDrawingShape, DrawingStartPointX, DrawingStartPointY, DrawingEndPointX, DrawingEndPointY, NowDrawingWidth, NowDrawingColor, null);
+                Info = new Shapes(NowDrawingShape, DrawingStartPointX, DrawingStartPointY, DrawingEndPointX, DrawingEndPointY, NowDrawingWidth, -1, NowDrawingColor, null);
                 MyDrawShape(temp, Info, !IsDrawing);
                 if (!IsDrawing) {
                     DrawingStartPointX = DrawingStartPointY = DrawingEndPointX = DrawingEndPointY = ILLEGAL;
@@ -135,7 +144,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
     private void MyDrawShape(Graphics2D temp, Shapes a, boolean IsRealDraw) {
         if (a.Kind.equals("Text")) {
             temp.setColor(a.color);
-            Font NowFont = new Font("楷体", Font.BOLD, 40);
+            Font NowFont = new Font("楷体", Font.BOLD, a.size);
             temp.setFont(NowFont);
         } else if (IsRealDraw) {
             temp.setColor(a.color);
@@ -197,8 +206,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
                         SelectShapeID = i;
                     }
                 }
-            }
-            else
+            } else
                 SelectShapeID = ILLEGAL;
         }
     }
@@ -254,11 +262,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
             repaint();
         }
 
-        if (IsSelectingShape && SelectShapeID != ILLEGAL)
-        {
+        if (IsSelectingShape && SelectShapeID != ILLEGAL) {
             Shapes SelectShape = Memory.get(SelectShapeID);
-            switch (e.getKeyCode())
-            {
+            switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     SelectShape.MoveUpOrDown(-10);
                     break;
@@ -298,8 +304,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
 }
 
-class Shapes implements Serializable{
+class Shapes implements Serializable {
     String Kind;
+
+    int size;
     int x1, y1;
     int x2, y2;
     float width;
@@ -307,7 +315,7 @@ class Shapes implements Serializable{
 
     String Info;
 
-    public Shapes(String Kind, int x1, int y1, int x2, int y2, float width, Color color, String Info) {
+    public Shapes(String Kind, int x1, int y1, int x2, int y2, float width, int size, Color color, String Info) {
         this.Kind = Kind;
         this.x1 = x1;
         this.y1 = y1;
@@ -316,6 +324,7 @@ class Shapes implements Serializable{
         this.width = width;
         this.color = color;
         this.Info = Info;
+        this.size = size;
     }
 
     public void MoveUpOrDown(int delta) {
