@@ -9,13 +9,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/miniCAD_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/META-INF/MANIFEST.MF" afterDir="false" />
+    <list default="true" id="c5d0b33c-a881-4436-8b2e-5a5cb40ee4a9" name="变更" comment="添加修改文字大小的功能，同时添加保存到当前文件功能">
+      <change afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/miniCAD_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/miniCAD_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/Board.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/miniCAD/Shapes.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,11 +70,11 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;工件&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDK&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;
   }
 }</component>
   <component name="RunManager">
@@ -118,7 +120,12 @@
       <workItem from="1669394369151" duration="20000" />
       <workItem from="1669444100180" duration="2390000" />
       <workItem from="1669514704797" duration="876000" />
-      <workItem from="1669634527884" duration="2347000" />
+      <workItem from="1669634527884" duration="9613000" />
+      <workItem from="1669692659309" duration="1870000" />
+      <workItem from="1669717939599" duration="601000" />
+      <workItem from="1669724830086" duration="8609000" />
+      <workItem from="1669735136465" duration="85000" />
+      <workItem from="1669737273474" duration="8000" />
     </task>
     <task id="LOCAL-00001" summary="git add .">
       <created>1668483217517</created>
@@ -218,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669445803962</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="添加修改文字大小的功能，同时添加保存到当前文件功能">
+      <created>1669637227239</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1669637227240</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,7 +260,8 @@
     <MESSAGE value="重构代码结构，实现笔粗细的修改" />
     <MESSAGE value="实现保存和重新打开文件" />
     <MESSAGE value="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="约束保存和打开时的文件类型，自动保存和仅打开.miniCAD文件" />
+    <MESSAGE value="添加修改文字大小的功能，同时添加保存到当前文件功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加修改文字大小的功能，同时添加保存到当前文件功能" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

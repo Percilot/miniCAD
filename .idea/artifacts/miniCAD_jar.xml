@@ -1,13 +1,8 @@
 <component name="ArtifactManager">
-  <artifact name="miniCAD:jar">
+  <artifact type="jar" build-on-make="true" name="miniCAD:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/miniCAD_jar</output-path>
-    <root id="root">
-      <element id="archive" name="miniCAD.jar">
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/resources/META-INF/MANIFEST.MF" />
-        </element>
-        <element id="module-output" name="miniCAD" />
-      </element>
+    <root id="archive" name="miniCAD.jar">
+      <element id="module-output" name="miniCAD" />
     </root>
   </artifact>
 </component>

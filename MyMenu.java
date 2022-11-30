@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,10 +21,10 @@ public class MyMenu {
         SelectMenu MySelectMenu = new SelectMenu(TotalBoard);
         FileMenu MyFileMenu = new FileMenu(TotalBoard);
 
+        MenuBar.add(MyFileMenu.GetMenu());
         MenuBar.add(MyShapeMenu.GetMenu());
         MenuBar.add(MyPenMenu.GetMenu());
         MenuBar.add(MySelectMenu.GetMenu());
-        MenuBar.add(MyFileMenu.GetMenu());
         MenuBar.setBounds(0, 0, 800, 30);
     }
 
@@ -59,10 +61,12 @@ class ShapeMenu {
         ChooseWritingText.addActionListener(new ShapeHandler(DrawingBoard));
 
         Shape.add(ChooseDrawingLine);
+        Shape.addSeparator();
         Shape.add(ChooseDrawingRect);
+        Shape.addSeparator();
         Shape.add(ChooseDrawingCircle);
+        Shape.addSeparator();
         Shape.add(ChooseWritingText);
-
     }
 
     public JMenu GetMenu() {
@@ -192,9 +196,10 @@ class PenMenu {
         ChoosePenWidth.addActionListener(new PenSizeHandler(DrawingBoard));
         ChooseCharSize.addActionListener(new CharSizeHandler(DrawingBoard));
 
-
         PenAttribute.add(ChoosePenColor);
+        PenAttribute.addSeparator();
         PenAttribute.add(ChoosePenWidth);
+        PenAttribute.addSeparator();
         PenAttribute.add(ChooseCharSize);
     }
 
@@ -219,22 +224,78 @@ class SelectMenu {
             }
         }
     }
+
+    class ButtonStateMonitor implements MenuListener {
+
+        @Override
+        public void menuSelected(MenuEvent e) {
+            ChangeColor.setEnabled(Target.IsShapeSelected());
+            DeleteShape.setEnabled(Target.IsShapeSelected());
+            ChangePosition.setEnabled(Target.IsShapeSelected());
+            Zoom.setEnabled(Target.IsShapeSelected());
+            Deselect.setEnabled(Target.IsShapeSelected());
+        }
+
+        @Override
+        public void menuDeselected(MenuEvent e) {
+
+        }
+
+        @Override
+        public void menuCanceled(MenuEvent e) {
+
+        }
+    }
     private final JMenu Select;
+    private final JMenuItem ChangeColor;
+    private final JMenuItem DeleteShape;
+
+    private final JMenuItem ChangePosition;
+
+    private final JMenuItem Zoom;
+
+    private final JMenuItem Deselect;
+
+    private final Board Target;
 
     public SelectMenu(Board DrawingBoard) {
-        Select = new JMenu("Select");
+        Target = DrawingBoard;
+        Select = new JMenu("Select & Edit");
+        Select.addMenuListener(new ButtonStateMonitor());
         JMenuItem SelectShape = new JMenuItem("SelectShape");
         SelectShape.addActionListener(new SelectHandler(DrawingBoard));
-        JMenuItem ChangeColor = new JMenuItem("ChangeColor");
+        ChangeColor = new JMenuItem("ChangeColor");
 
         ChangeColor.addActionListener(e -> {
             Color color = JColorChooser.showDialog(ChangeColor, "Select new color", Color.lightGray);
             if (color == null) color = Color.BLACK;
-            DrawingBoard.ChangeSelectColor(color);
+            DrawingBoard.ChangeToSelectColor(color);
         });
 
+        DeleteShape = new JMenuItem("Delete");
+        DeleteShape.addActionListener(e -> Target.RemoveSelectedShape());
+
+        ChangePosition = new JMenuItem("ChangePosition");
+        ChangePosition.addActionListener(e -> Target.StartMoveSelectedShape());
+
+        Zoom = new JMenuItem("Zoom");
+        Zoom.addActionListener(e -> Target.StartZoomSelectedShape());
+
+        Deselect = new JMenuItem("Deselect");
+        Deselect.addActionListener(e -> Target.Deselect());
+
+
         Select.add(SelectShape);
+        Select.addSeparator();
+        Select.add(Deselect);
+        Select.addSeparator();
         Select.add(ChangeColor);
+        Select.addSeparator();
+        Select.add(ChangePosition);
+        Select.addSeparator();
+        Select.add(Zoom);
+        Select.addSeparator();
+        Select.add(DeleteShape);
     }
 
     public JMenu GetMenu() {
@@ -252,8 +313,18 @@ class FileMenu {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
-
-            if (e.getActionCommand().equals("Save to new file")) {
+            if (e.getActionCommand().equals("Save") && !NowOpenFileName.toString().isEmpty()) {
+                File TargetFile = new File(NowOpenFileName.toString());
+                try {
+                    ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
+                    WriteToFile.writeObject(Target);
+                    WriteToFile.flush();
+                    WriteToFile.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            else if (e.getActionCommand().equals("Save to new file") || (e.getActionCommand().equals("Save") && NowOpenFileName.toString().isEmpty())) {
                 chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
                 int option = chooser.showSaveDialog(null);
                 if (option == JFileChooser.APPROVE_OPTION) {
@@ -281,7 +352,7 @@ class FileMenu {
                     FileName = chooser.getSelectedFile().getPath();
                 if (FileName.isEmpty())
                     return;
-                NowOpenFileName = FileName;
+                NowOpenFileName = new StringBuilder(FileName);
                 File TargetFile = new File(FileName);
 
                 try {
@@ -297,39 +368,24 @@ class FileMenu {
     }
     private final JMenu File;
 
-    private final Board Target;
-    private String NowOpenFileName;
+    private StringBuilder NowOpenFileName;
 
     public FileMenu(Board NowDrawingBoard) {
         File = new JMenu("File");
-        this.Target = NowDrawingBoard;
-        NowOpenFileName = "";
+        NowOpenFileName = new StringBuilder();
 
-        JMenuItem Save = new JMenuItem("Save");
-        Save.addActionListener(e -> {
-            if (!NowOpenFileName.isEmpty()) {
-                File TargetFile = new File(NowOpenFileName);
+        JMenuItem save = new JMenuItem("Save");
+        save.addActionListener(new MyFileHandler(NowDrawingBoard));
+        JMenuItem saveToNewFile = new JMenuItem("Save to new file");
+        saveToNewFile.addActionListener(new MyFileHandler(NowDrawingBoard));
+        JMenuItem open = new JMenuItem("Open");
+        open.addActionListener(new MyFileHandler(NowDrawingBoard));
 
-                try {
-                    ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
-                    WriteToFile.writeObject(Target);
-                    WriteToFile.flush();
-                    WriteToFile.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-
-        });
-
-        JMenuItem SaveToNewFile = new JMenuItem("Save to new file");
-        SaveToNewFile.addActionListener(new MyFileHandler(NowDrawingBoard));
-        JMenuItem Open = new JMenuItem("Open");
-        Open.addActionListener(new MyFileHandler(NowDrawingBoard));
-
-        File.add(Save);
-        File.add(SaveToNewFile);
-        File.add(Open);
+        File.add(save);
+        File.addSeparator();
+        File.add(saveToNewFile);
+        File.addSeparator();
+        File.add(open);
     }
 
     public JMenu GetMenu() {
