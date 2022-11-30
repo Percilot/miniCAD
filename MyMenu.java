@@ -313,10 +313,10 @@ class FileMenu {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
-            if (e.getActionCommand().equals("Save") && !NowOpenFileName.toString().isEmpty()) {
-                File TargetFile = new File(NowOpenFileName.toString());
+            if (e.getActionCommand().equals("Save") && NowOpenFile != null) {
+                System.out.println(1);
                 try {
-                    ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
+                    ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(NowOpenFile));
                     WriteToFile.writeObject(Target);
                     WriteToFile.flush();
                     WriteToFile.close();
@@ -324,19 +324,19 @@ class FileMenu {
                     throw new RuntimeException(ex);
                 }
             }
-            else if (e.getActionCommand().equals("Save to new file") || (e.getActionCommand().equals("Save") && NowOpenFileName.toString().isEmpty())) {
+            else if (e.getActionCommand().equals("Save to new file") || (e.getActionCommand().equals("Save") && NowOpenFile == null)) {
+                System.out.println(2);
                 chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
                 int option = chooser.showSaveDialog(null);
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    File TargetFile = chooser.getSelectedFile();
-                    String FileName = TargetFile.getName();
+                    String FileName = chooser.getSelectedFile().getName();
 
                     if (!FileName.endsWith(".miniCAD"))
                         FileName = FileName + ".miniCAD";
-                    TargetFile = new File(chooser.getCurrentDirectory(), FileName);
+                    NowOpenFile = new File(chooser.getCurrentDirectory(), FileName);
 
                     try {
-                        ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(TargetFile));
+                        ObjectOutputStream WriteToFile = new ObjectOutputStream(new FileOutputStream(NowOpenFile));
                         WriteToFile.writeObject(Target);
                         WriteToFile.flush();
                         WriteToFile.close();
@@ -345,18 +345,19 @@ class FileMenu {
                     }
                 }
             } else if (e.getActionCommand().equals("Open")) {
+                System.out.println(3);
                 String FileName = "";
                 chooser.setFileFilter(new FileNameExtensionFilter("miniCAD文件(.miniCAD)", "miniCAD"));
                 int option = chooser.showOpenDialog(null);
                 if (option == JFileChooser.APPROVE_OPTION)
-                    FileName = chooser.getSelectedFile().getPath();
+                    FileName = chooser.getSelectedFile().getName();
                 if (FileName.isEmpty())
                     return;
-                NowOpenFileName = new StringBuilder(FileName);
-                File TargetFile = new File(FileName);
+
+                NowOpenFile = new File(chooser.getCurrentDirectory(), chooser.getSelectedFile().getName());
 
                 try {
-                    ObjectInputStream ReadFromFile = new ObjectInputStream(new FileInputStream(TargetFile));
+                    ObjectInputStream ReadFromFile = new ObjectInputStream(new FileInputStream(NowOpenFile));
                     Board Temp = (Board) ReadFromFile.readObject();
                     Target.SetMemory(Temp.GetMemory());
                     ReadFromFile.close();
@@ -367,12 +368,10 @@ class FileMenu {
         }
     }
     private final JMenu File;
-
-    private StringBuilder NowOpenFileName;
+    private File NowOpenFile;
 
     public FileMenu(Board NowDrawingBoard) {
         File = new JMenu("File");
-        NowOpenFileName = new StringBuilder();
 
         JMenuItem save = new JMenuItem("Save");
         save.addActionListener(new MyFileHandler(NowDrawingBoard));
